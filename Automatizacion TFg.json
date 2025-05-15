@@ -1,0 +1,1950 @@
+{
+    "name": "TFG",
+    "flow": [
+        {
+            "id": 13,
+            "module": "email:TriggerNewEmail",
+            "version": 7,
+            "parameters": {
+                "to": "",
+                "from": "",
+                "text": "",
+                "folder": "Inbox",
+                "account": 6728674,
+                "subject": "Request de casas",
+                "criteria": "ALL",
+                "markSeen": true,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -809,
+                    "y": -120
+                },
+                "restore": {
+                    "parameters": {
+                        "folder": {
+                            "path": [
+                                "Inbox"
+                            ]
+                        },
+                        "account": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "microsoft-smtp-imap"
+                            },
+                            "label": "TFG (gonzalo.rcarrato@hotmail.com)"
+                        },
+                        "criteria": {
+                            "label": "All emails"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account:imap,google-restricted,microsoft-smtp-imap",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "criteria",
+                        "type": "select",
+                        "label": "Criteria",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "ALL",
+                                "SEEN",
+                                "UNSEEN"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "email",
+                        "label": "Sender email address"
+                    },
+                    {
+                        "name": "to",
+                        "type": "email",
+                        "label": "Recipient email address"
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject"
+                    },
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Phrase"
+                    },
+                    {
+                        "name": "markSeen",
+                        "type": "boolean",
+                        "label": "Mark message(s) as read when fetched"
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    },
+                    {
+                        "type": "hidden"
+                    },
+                    {
+                        "name": "folder",
+                        "type": "folder",
+                        "label": "Folder",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "openai-gpt-3:transformTextToStructuredData",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 6684432
+            },
+            "mapper": {
+                "model": "gpt-4o-mini",
+                "prompt": "You are going to analyze the text as a salesman of a real state company would do, you must transform the text of the customer preferences onto this different fields, 'PRICE', 'CONSTRUCTEDAREA', 'ROOMNUMBER', 'HASLIFT', 'HASPARKINGSPACE', 'HASSWIMMINGPOOL'.\n\nmust be clear, no symbols, neat no decimals, just the data\n​",
+                "rawText": "{{13.text}}",
+                "parameters": [
+                    {
+                        "name": "PRICE",
+                        "type": "number",
+                        "isRequired": false,
+                        "description": "Price of the building",
+                        "valueExamples": [
+                            "126000",
+                            "373000",
+                            "3187000"
+                        ]
+                    },
+                    {
+                        "name": "CONSTRUCTEDAREA",
+                        "type": "number",
+                        "isRequired": false,
+                        "description": "Area of the building",
+                        "valueExamples": [
+                            "47",
+                            "83",
+                            "3230"
+                        ]
+                    },
+                    {
+                        "name": "ROOMNUMBER",
+                        "type": "number",
+                        "isRequired": false,
+                        "description": "Number of rooms on the house, 0 if has just one",
+                        "valueExamples": [
+                            "0",
+                            "11",
+                            "4"
+                        ]
+                    },
+                    {
+                        "name": "HASLIFT",
+                        "type": "boolean",
+                        "isRequired": false,
+                        "description": "if it has lift, 0 if no 1 if yes"
+                    },
+                    {
+                        "name": "HASPARKINGSPACE",
+                        "type": "boolean",
+                        "isRequired": false,
+                        "description": "if it has parking spot, 0 if no 1 if yes"
+                    },
+                    {
+                        "name": "HASSWIMMINGPOOL",
+                        "type": "boolean",
+                        "isRequired": false,
+                        "description": "if it has swimming pool, 0 if no 1 if yes"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": -405,
+                    "y": -122
+                },
+                "restore": {
+                    "expect": {
+                        "model": {
+                            "mode": "chose",
+                            "label": "gpt-4o-mini (system)"
+                        },
+                        "parameters": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Number"
+                                    },
+                                    "isRequired": {
+                                        "mode": "chose"
+                                    },
+                                    "valueExamples": {
+                                        "mode": "chose",
+                                        "items": [
+                                            null,
+                                            null,
+                                            null
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Number"
+                                    },
+                                    "isRequired": {
+                                        "mode": "chose"
+                                    },
+                                    "valueExamples": {
+                                        "mode": "chose",
+                                        "items": [
+                                            null,
+                                            null,
+                                            null
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Number"
+                                    },
+                                    "isRequired": {
+                                        "mode": "chose"
+                                    },
+                                    "valueExamples": {
+                                        "mode": "chose",
+                                        "items": [
+                                            null,
+                                            null,
+                                            null
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Boolean"
+                                    },
+                                    "isRequired": {
+                                        "mode": "chose"
+                                    }
+                                },
+                                {
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Boolean"
+                                    },
+                                    "isRequired": {
+                                        "mode": "chose"
+                                    }
+                                },
+                                {
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Boolean"
+                                    },
+                                    "isRequired": {
+                                        "mode": "chose"
+                                    }
+                                }
+                            ]
+                        },
+                        "objectDefinitions": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "openai-gpt-3"
+                            },
+                            "label": "TFG"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:openai-gpt-3",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "rawText",
+                        "type": "text",
+                        "label": "Text to Parse",
+                        "required": true
+                    },
+                    {
+                        "name": "prompt",
+                        "type": "text",
+                        "label": "Prompt",
+                        "required": true
+                    },
+                    {
+                        "name": "parameters",
+                        "spec": {
+                            "name": "value",
+                            "spec": [],
+                            "type": "collection",
+                            "label": "Data Definition"
+                        },
+                        "type": "array",
+                        "label": "Structured Data Definition",
+                        "required": true
+                    },
+                    {
+                        "name": "objectDefinitions",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Object Name",
+                                    "required": true
+                                },
+                                {
+                                    "name": "description",
+                                    "type": "text",
+                                    "label": "Description",
+                                    "required": true
+                                },
+                                {
+                                    "name": "properties",
+                                    "spec": {
+                                        "spec": [],
+                                        "type": "collection",
+                                        "label": "Property"
+                                    },
+                                    "type": "array",
+                                    "label": "Properties",
+                                    "labels": {
+                                        "add": "Add property"
+                                    },
+                                    "required": true
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Object Definition"
+                        },
+                        "type": "array",
+                        "label": "Object Definitions"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "PRICE",
+                        "type": "number"
+                    },
+                    {
+                        "name": "CONSTRUCTEDAREA",
+                        "type": "number"
+                    },
+                    {
+                        "name": "ROOMNUMBER",
+                        "type": "number"
+                    },
+                    {
+                        "name": "HASLIFT",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "HASPARKINGSPACE",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "HASSWIMMINGPOOL",
+                        "type": "boolean"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "module": "google-sheets:filterRows",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 6597612
+            },
+            "mapper": {
+                "from": "drive",
+                "limit": "3",
+                "filter": [
+                    [
+                        {
+                            "a": "C",
+                            "b": "{{4.PRICE}}",
+                            "o": "number:lessorequal"
+                        },
+                        {
+                            "a": "E",
+                            "b": "{{4.CONSTRUCTEDAREA}}",
+                            "o": "number:greaterorequal"
+                        },
+                        {
+                            "a": "F",
+                            "b": "{{4.ROOMNUMBER}}",
+                            "o": "number:greaterorequal"
+                        },
+                        {
+                            "a": "I",
+                            "b": "{{4.HASLIFT}}",
+                            "o": "text:equal"
+                        },
+                        {
+                            "a": "L",
+                            "b": "{{4.HASPARKINGSPACE}}",
+                            "o": "text:equal"
+                        },
+                        {
+                            "a": "U",
+                            "b": "{{4.HASSWIMMINGPOOL}}",
+                            "o": "text:equal"
+                        }
+                    ]
+                ],
+                "orderBy": "C",
+                "sheetId": "Sheet1",
+                "fieldType": "number",
+                "sortOrder": "desc",
+                "spreadsheetId": "1znzgeWSqWDRL_TLgQ_B1Q3lO0aN0MCmUsnDgvk6jzGk",
+                "tableFirstRow": "A1:CZ1",
+                "includesHeaders": true,
+                "valueRenderOption": "FORMATTED_VALUE",
+                "dateTimeRenderOption": "FORMATTED_STRING"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 298,
+                    "y": -118
+                },
+                "restore": {
+                    "expect": {
+                        "from": {
+                            "label": "Select from My Drive"
+                        },
+                        "orderBy": {
+                            "mode": "chose",
+                            "label": "PRICE (C)"
+                        },
+                        "sheetId": {
+                            "mode": "chose",
+                            "label": "Sheet1"
+                        },
+                        "fieldType": {
+                            "mode": "chose",
+                            "label": "Number"
+                        },
+                        "sortOrder": {
+                            "mode": "chose",
+                            "label": "Descending"
+                        },
+                        "spreadsheetId": {
+                            "mode": "chose",
+                            "label": "data clusters"
+                        },
+                        "tableFirstRow": {
+                            "label": "A-CZ"
+                        },
+                        "includesHeaders": {
+                            "mode": "chose",
+                            "label": "Yes"
+                        },
+                        "valueRenderOption": {
+                            "mode": "chose",
+                            "label": "Formatted value"
+                        },
+                        "dateTimeRenderOption": {
+                            "mode": "chose",
+                            "label": "Formatted string"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "conexon tfg (gonzalo.rcarrato@gmail.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valueRenderOption",
+                        "type": "select",
+                        "label": "Value render option",
+                        "validate": {
+                            "enum": [
+                                "FORMATTED_VALUE",
+                                "UNFORMATTED_VALUE",
+                                "FORMULA"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "dateTimeRenderOption",
+                        "type": "select",
+                        "label": "Date and time render option",
+                        "validate": {
+                            "enum": [
+                                "SERIAL_NUMBER",
+                                "FORMATTED_STRING"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "select",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tableFirstRow",
+                        "type": "select",
+                        "label": "Column range",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "A1:Z1",
+                                "A1:BZ1",
+                                "A1:CZ1",
+                                "A1:DZ1",
+                                "A1:MZ1",
+                                "A1:ZZ1",
+                                "A1:AZZ1",
+                                "A1:BZZ1",
+                                "A1:CZZ1",
+                                "A1:DZZ1",
+                                "A1:MZZ1",
+                                "A1:ZZZ1"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "type": "filter",
+                        "label": "Filter",
+                        "options": "rpc://google-sheets/2/rpcGetFilterKeys?includesHeaders=true"
+                    },
+                    {
+                        "name": "orderBy",
+                        "type": "select",
+                        "label": "Order by"
+                    },
+                    {
+                        "name": "sortOrder",
+                        "type": "select",
+                        "label": "Sort order",
+                        "validate": {
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "fieldType",
+                        "type": "select",
+                        "label": "Field Type",
+                        "validate": {
+                            "enum": [
+                                "string",
+                                "number",
+                                "date"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "__IMTLENGTH__",
+                        "type": "uinteger",
+                        "label": "Total number of bundles"
+                    },
+                    {
+                        "name": "__IMTINDEX__",
+                        "type": "uinteger",
+                        "label": "Bundle order position"
+                    },
+                    {
+                        "name": "__ROW_NUMBER__",
+                        "type": "number",
+                        "label": "Row number"
+                    },
+                    {
+                        "name": "__SPREADSHEET_ID__",
+                        "type": "text",
+                        "label": "Spreadsheet ID"
+                    },
+                    {
+                        "name": "__SHEET__",
+                        "type": "text",
+                        "label": "Sheet"
+                    },
+                    {
+                        "name": "0",
+                        "type": "text",
+                        "label": "ASSETID (A)"
+                    },
+                    {
+                        "name": "1",
+                        "type": "text",
+                        "label": "PERIOD (B)"
+                    },
+                    {
+                        "name": "2",
+                        "type": "text",
+                        "label": "PRICE (C)"
+                    },
+                    {
+                        "name": "3",
+                        "type": "text",
+                        "label": "UNITPRICE (D)"
+                    },
+                    {
+                        "name": "4",
+                        "type": "text",
+                        "label": "CONSTRUCTEDAREA (E)"
+                    },
+                    {
+                        "name": "5",
+                        "type": "text",
+                        "label": "ROOMNUMBER (F)"
+                    },
+                    {
+                        "name": "6",
+                        "type": "text",
+                        "label": "BATHNUMBER (G)"
+                    },
+                    {
+                        "name": "7",
+                        "type": "text",
+                        "label": "HASTERRACE (H)"
+                    },
+                    {
+                        "name": "8",
+                        "type": "text",
+                        "label": "HASLIFT (I)"
+                    },
+                    {
+                        "name": "9",
+                        "type": "text",
+                        "label": "HASAIRCONDITIONING (J)"
+                    },
+                    {
+                        "name": "10",
+                        "type": "text",
+                        "label": "AMENITYID (K)"
+                    },
+                    {
+                        "name": "11",
+                        "type": "text",
+                        "label": "HASPARKINGSPACE (L)"
+                    },
+                    {
+                        "name": "12",
+                        "type": "text",
+                        "label": "ISPARKINGSPACEINCLUDEDINPRICE (M)"
+                    },
+                    {
+                        "name": "13",
+                        "type": "text",
+                        "label": "PARKINGSPACEPRICE (N)"
+                    },
+                    {
+                        "name": "14",
+                        "type": "text",
+                        "label": "HASNORTHORIENTATION (O)"
+                    },
+                    {
+                        "name": "15",
+                        "type": "text",
+                        "label": "HASSOUTHORIENTATION (P)"
+                    },
+                    {
+                        "name": "16",
+                        "type": "text",
+                        "label": "HASEASTORIENTATION (Q)"
+                    },
+                    {
+                        "name": "17",
+                        "type": "text",
+                        "label": "HASWESTORIENTATION (R)"
+                    },
+                    {
+                        "name": "18",
+                        "type": "text",
+                        "label": "HASBOXROOM (S)"
+                    },
+                    {
+                        "name": "19",
+                        "type": "text",
+                        "label": "HASWARDROBE (T)"
+                    },
+                    {
+                        "name": "20",
+                        "type": "text",
+                        "label": "HASSWIMMINGPOOL (U)"
+                    },
+                    {
+                        "name": "21",
+                        "type": "text",
+                        "label": "HASDOORMAN (V)"
+                    },
+                    {
+                        "name": "22",
+                        "type": "text",
+                        "label": "HASGARDEN (W)"
+                    },
+                    {
+                        "name": "23",
+                        "type": "text",
+                        "label": "ISDUPLEX (X)"
+                    },
+                    {
+                        "name": "24",
+                        "type": "text",
+                        "label": "ISSTUDIO (Y)"
+                    },
+                    {
+                        "name": "25",
+                        "type": "text",
+                        "label": "ISINTOPFLOOR (Z)"
+                    },
+                    {
+                        "name": "26",
+                        "type": "text",
+                        "label": "FLOORCLEAN (AA)"
+                    },
+                    {
+                        "name": "27",
+                        "type": "text",
+                        "label": "FLATLOCATIONID (AB)"
+                    },
+                    {
+                        "name": "28",
+                        "type": "text",
+                        "label": "CADCONSTRUCTIONYEAR (AC)"
+                    },
+                    {
+                        "name": "29",
+                        "type": "text",
+                        "label": "CADMAXBUILDINGFLOOR (AD)"
+                    },
+                    {
+                        "name": "30",
+                        "type": "text",
+                        "label": "CADDWELLINGCOUNT (AE)"
+                    },
+                    {
+                        "name": "31",
+                        "type": "text",
+                        "label": "CADASTRALQUALITYID (AF)"
+                    },
+                    {
+                        "name": "32",
+                        "type": "text",
+                        "label": "BUILTTYPEID_1 (AG)"
+                    },
+                    {
+                        "name": "33",
+                        "type": "text",
+                        "label": "BUILTTYPEID_2 (AH)"
+                    },
+                    {
+                        "name": "34",
+                        "type": "text",
+                        "label": "BUILTTYPEID_3 (AI)"
+                    },
+                    {
+                        "name": "35",
+                        "type": "text",
+                        "label": "DISTANCE_TO_CITY_CENTER (AJ)"
+                    },
+                    {
+                        "name": "36",
+                        "type": "text",
+                        "label": "DISTANCE_TO_METRO (AK)"
+                    },
+                    {
+                        "name": "37",
+                        "type": "text",
+                        "label": "DISTANCE_TO_CASTELLANA (AL)"
+                    },
+                    {
+                        "name": "38",
+                        "type": "text",
+                        "label": "LONGITUDE (AM)"
+                    },
+                    {
+                        "name": "39",
+                        "type": "text",
+                        "label": "LATITUDE (AN)"
+                    },
+                    {
+                        "name": "40",
+                        "type": "text",
+                        "label": "geometry (AO)"
+                    },
+                    {
+                        "name": "41",
+                        "type": "text",
+                        "label": "es_planta_baja (AP)"
+                    },
+                    {
+                        "name": "42",
+                        "type": "text",
+                        "label": "Cluster_DBSCAN (AQ)"
+                    },
+                    {
+                        "name": "43",
+                        "type": "text",
+                        "label": "Subcluster_DBSCAN (AR)"
+                    },
+                    {
+                        "name": "44",
+                        "type": "text",
+                        "label": "cluster (AS)"
+                    },
+                    {
+                        "name": "45",
+                        "type": "text",
+                        "label": "membership (AT)"
+                    },
+                    {
+                        "name": "46",
+                        "type": "text",
+                        "label": "(AU)"
+                    },
+                    {
+                        "name": "47",
+                        "type": "text",
+                        "label": "(AV)"
+                    },
+                    {
+                        "name": "48",
+                        "type": "text",
+                        "label": "(AW)"
+                    },
+                    {
+                        "name": "49",
+                        "type": "text",
+                        "label": "(AX)"
+                    },
+                    {
+                        "name": "50",
+                        "type": "text",
+                        "label": "(AY)"
+                    },
+                    {
+                        "name": "51",
+                        "type": "text",
+                        "label": "(AZ)"
+                    },
+                    {
+                        "name": "52",
+                        "type": "text",
+                        "label": "(BA)"
+                    },
+                    {
+                        "name": "53",
+                        "type": "text",
+                        "label": "(BB)"
+                    },
+                    {
+                        "name": "54",
+                        "type": "text",
+                        "label": "(BC)"
+                    },
+                    {
+                        "name": "55",
+                        "type": "text",
+                        "label": "(BD)"
+                    },
+                    {
+                        "name": "56",
+                        "type": "text",
+                        "label": "(BE)"
+                    },
+                    {
+                        "name": "57",
+                        "type": "text",
+                        "label": "(BF)"
+                    },
+                    {
+                        "name": "58",
+                        "type": "text",
+                        "label": "(BG)"
+                    },
+                    {
+                        "name": "59",
+                        "type": "text",
+                        "label": "(BH)"
+                    },
+                    {
+                        "name": "60",
+                        "type": "text",
+                        "label": "(BI)"
+                    },
+                    {
+                        "name": "61",
+                        "type": "text",
+                        "label": "(BJ)"
+                    },
+                    {
+                        "name": "62",
+                        "type": "text",
+                        "label": "(BK)"
+                    },
+                    {
+                        "name": "63",
+                        "type": "text",
+                        "label": "(BL)"
+                    },
+                    {
+                        "name": "64",
+                        "type": "text",
+                        "label": "(BM)"
+                    },
+                    {
+                        "name": "65",
+                        "type": "text",
+                        "label": "(BN)"
+                    },
+                    {
+                        "name": "66",
+                        "type": "text",
+                        "label": "(BO)"
+                    },
+                    {
+                        "name": "67",
+                        "type": "text",
+                        "label": "(BP)"
+                    },
+                    {
+                        "name": "68",
+                        "type": "text",
+                        "label": "(BQ)"
+                    },
+                    {
+                        "name": "69",
+                        "type": "text",
+                        "label": "(BR)"
+                    },
+                    {
+                        "name": "70",
+                        "type": "text",
+                        "label": "(BS)"
+                    },
+                    {
+                        "name": "71",
+                        "type": "text",
+                        "label": "(BT)"
+                    },
+                    {
+                        "name": "72",
+                        "type": "text",
+                        "label": "(BU)"
+                    },
+                    {
+                        "name": "73",
+                        "type": "text",
+                        "label": "(BV)"
+                    },
+                    {
+                        "name": "74",
+                        "type": "text",
+                        "label": "(BW)"
+                    },
+                    {
+                        "name": "75",
+                        "type": "text",
+                        "label": "(BX)"
+                    },
+                    {
+                        "name": "76",
+                        "type": "text",
+                        "label": "(BY)"
+                    },
+                    {
+                        "name": "77",
+                        "type": "text",
+                        "label": "(BZ)"
+                    },
+                    {
+                        "name": "78",
+                        "type": "text",
+                        "label": "(CA)"
+                    },
+                    {
+                        "name": "79",
+                        "type": "text",
+                        "label": "(CB)"
+                    },
+                    {
+                        "name": "80",
+                        "type": "text",
+                        "label": "(CC)"
+                    },
+                    {
+                        "name": "81",
+                        "type": "text",
+                        "label": "(CD)"
+                    },
+                    {
+                        "name": "82",
+                        "type": "text",
+                        "label": "(CE)"
+                    },
+                    {
+                        "name": "83",
+                        "type": "text",
+                        "label": "(CF)"
+                    },
+                    {
+                        "name": "84",
+                        "type": "text",
+                        "label": "(CG)"
+                    },
+                    {
+                        "name": "85",
+                        "type": "text",
+                        "label": "(CH)"
+                    },
+                    {
+                        "name": "86",
+                        "type": "text",
+                        "label": "(CI)"
+                    },
+                    {
+                        "name": "87",
+                        "type": "text",
+                        "label": "(CJ)"
+                    },
+                    {
+                        "name": "88",
+                        "type": "text",
+                        "label": "(CK)"
+                    },
+                    {
+                        "name": "89",
+                        "type": "text",
+                        "label": "(CL)"
+                    },
+                    {
+                        "name": "90",
+                        "type": "text",
+                        "label": "(CM)"
+                    },
+                    {
+                        "name": "91",
+                        "type": "text",
+                        "label": "(CN)"
+                    },
+                    {
+                        "name": "92",
+                        "type": "text",
+                        "label": "(CO)"
+                    },
+                    {
+                        "name": "93",
+                        "type": "text",
+                        "label": "(CP)"
+                    },
+                    {
+                        "name": "94",
+                        "type": "text",
+                        "label": "(CQ)"
+                    },
+                    {
+                        "name": "95",
+                        "type": "text",
+                        "label": "(CR)"
+                    },
+                    {
+                        "name": "96",
+                        "type": "text",
+                        "label": "(CS)"
+                    },
+                    {
+                        "name": "97",
+                        "type": "text",
+                        "label": "(CT)"
+                    },
+                    {
+                        "name": "98",
+                        "type": "text",
+                        "label": "(CU)"
+                    },
+                    {
+                        "name": "99",
+                        "type": "text",
+                        "label": "(CV)"
+                    },
+                    {
+                        "name": "100",
+                        "type": "text",
+                        "label": "(CW)"
+                    },
+                    {
+                        "name": "101",
+                        "type": "text",
+                        "label": "(CX)"
+                    },
+                    {
+                        "name": "102",
+                        "type": "text",
+                        "label": "(CY)"
+                    },
+                    {
+                        "name": "103",
+                        "type": "text",
+                        "label": "(CZ)"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 11,
+            "module": "openai-gpt-3:CreateCompletion",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 6684432
+            },
+            "mapper": {
+                "model": "gpt-3.5-turbo",
+                "top_p": "1",
+                "select": "chat",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "I have a series of values that need to be transformed into a property-selling message. Your task is to take these values, convert and format them into a clear, persuasive description of a house as if you were a real estate salesperson. Please follow these instructions:\n\n\nPrice: Use the value from {{9.`2`}} and display it as the price in euros.\n\n\nSize: Use the value from {{9.`4`}} and convert it to square meters.\n\n\nExtra Rooms: Use the value from {{9.`5`}} to indicate the additional number of rooms in the house.\n\n\nBathrooms: Use the value from {{9.`6`}} to indicate the number of bathrooms.\n\n\nTerrace: Evaluate the boolean value from {{9.`7`}} (0 = no, 1 = yes) and indicate whether the house has a terrace.\n\n\nElevator: Evaluate the boolean value from {{9.`8`}} (0 = no, 1 = yes) and indicate whether the property includes an elevator.\n\n\nAir Conditioning: Evaluate the boolean value from {{9.`9`}} (0 = no, 1 = yes) and indicate whether it has air conditioning.\n\n\nParking Space: Evaluate the boolean value from {{9.`11`}}(0 = no, 1 = yes) and indicate whether the property has a parking space.\n\n\nParking Inclusion: Evaluate the boolean value from {{9.`12`}}(0 = no, 1 = yes) to determine if the parking space is included in the price. If the value is 0 (not included), also add the price of the parking space provided by {{9.`13`}}(in euros).\n\n\nOrientation: For the following booleans (0 = no, 1 = yes), indicate the corresponding orientations:\n\n\nNorth-facing: {{9.`14`}}\n\n\nSouth-facing: {{9.`15`}}\n\n\nEast-facing: {{9.`16`}}\n\n\nWest-facing: {{9.`17`}}\n\n\n\n\nGarden: Evaluate the boolean value from {{9.`22`}} (0 = no, 1 = yes) and indicate whether the property has a garden.\n\nSwimmingpool: evaluate the boolean value from {{9.`20`}}(0 = no, 1 = yes) and indicate whether the property has a swimmingpool. \n\nYou are an expert assistant in formatting and transforming data to make it more readable for the client, and you are also a seasoned real estate salesperson. When you receive these values, please return a message that includes clear explanations, necessary conversions (such as converting boolean data to descriptive text and numeric values to proper units), and a compelling description of the property for potential buyers.\n\nAdditional Instructions to Append to the Prompt (in English):\n\n\nFinal Answer Format (Response Must Be in Spanish):\nThe final answer must include the description for three houses in a single message. For each house, provide the following information (all text in Spanish):\n\n\nInvent a creative and attractive name for the property based on its characteristics. This name should capture the essence or a standout feature of the house (for example, \"El Rincón Urbano\" if it is centrally located or \"El Chalet Familiar\" if it boasts a spacious garden).\n\n\nA concise summary highlighting key aspects such as the number of extra rooms, bathrooms, square meters, etc.\n\n\nA bullet-point list of the most important features. Include only those features where the corresponding boolean value is 1. For example, if {{9.`7`}}  equals 1, mention “Terraza”; if it equals 0, omit it. Similarly, include Elevator, Air Conditioning, Parking Space, and the corresponding orientations (North, South, East, West) only if their boolean values are 1.\n\n\nPrecio: Display the property price using the value from {{9.`2`}} in euros.\n\n\nNota sobre Parking Inclusion: If Parking Inclusion {{9.`12`}} is 0, add the extra parking cost provided by {{9.`13`}} in euros .\n\n\n\n\n\nExamples of Final Messages (The examples below are the messages to be sent, and must be in Spanish):\nEjemplo 1:\nEl Rincón Urbano:\n\n\n\nEn el corazón de la ciudad se encuentra este encantador apartamento de 47 m², diseñado para maximizar cada rincón. Con una habitación extra ideal para oficina o para huéspedes, y un baño moderno, este inmueble combina funcionalidad con estilo. Su amplia terraza permite disfrutar de vistas urbanas y momentos de relax al aire libre, mientras su ubicación estratégica garantiza acceso inmediato a restaurantes, parques y centros culturales.\n\n\n\n\n\nAscensor (facilita el acceso a cada piso)\n\n\nTerraza (perfecta para disfrutar del aire libre)\n\n\n\n\nPrecio: 126000 €\n\n\nEl Chalet Familar:\n\n\n\nEste elegante chalet de 100 m² es la elección perfecta para familias que buscan espacio y confort. Con 2 habitaciones extra y 2 baños modernos, la vivienda ofrece un ambiente luminoso y una distribución que realza la amplitud. Destaca su precioso jardín privado, ideal para actividades al aire libre, y una refrescante piscina, perfecta para disfrutar de los días soleados. Además, el sistema de aire acondicionado asegura un ambiente agradable en cualquier estación, y la opción de aparcamiento, incluida en el precio, añade un valor adicional inigualable.\n\n\n\n\n\nJardín (espacio verde para relajarse)\n\n\nPiscina (ideal para disfrutar del verano)\n\n\nAire acondicionado (garantiza confort durante todo el año)\n\n\nAparcamiento incluido en el precio\n\n\n\n\nPrecio: 200000 €\n\n\nEl Refugio Moderno:\n\n\n\nDescubre este moderno apartamento de 80 m², situado en una zona residencial de alto nivel. Con 1 habitación extra y 1 baño elegantemente diseñado, su estilo contemporáneo se refleja en cada detalle, desde sus acabados de calidad hasta su iluminación natural. El inmueble cuenta con aire acondicionado y ascensor para maximizar la comodidad, haciendo de este hogar la opción ideal para profesionales y familias pequeñas que buscan exclusividad y bienestar.\n\n\n\n\n\nAire acondicionado (para un ambiente perfecto en cualquier época)\n\n\nAscensor (brinda accesibilidad y confort)\n\n\n\n\nPrecio: 150000 €\n\n\n\nEjemplo 2:\nEl Oasis de Luz:\n\n\n\nEste luminoso piso de 60 m² ofrece un refugio urbano lleno de encanto. Con 1 habitación extra y 1 baño cuidadosamente renovado, el apartamento se destaca por su ambiente acogedor y moderno. La presencia de una terraza amplia permite disfrutar de momentos de relax y vistas excepcionales, mientras que la comodidad del ascensor complementa la experiencia de vida en el centro.\n\n\n\n\n\nTerraza (espacio perfecto para disfrutar del exterior)\n\n\nAscensor (facilita el acceso diario)\n\n\n\n\nPrecio: 140000 €\n\n\nLa Elegancia Contemporánea:\n\n\n\nIdeal para una familia pequeña, este espacioso apartamento de 90 m² cuenta con 2 habitaciones extra y 2 baños con acabados de alta calidad. La vivienda ofrece un entorno de tranquilidad y confort, destacándose por su luminosidad y diseño contemporáneo. Un jardín privado aporta un toque natural, y el aire acondicionado asegura el confort en verano e invierno. Cabe destacar que, en caso de no incluirse, el aparcamiento tiene un coste extra, brindando flexibilidad a sus propietarios.\n\n\n\n\n\nJardín (área verde privada para disfrutar en familia)\n\n\nAire acondicionado (para mantener un ambiente agradable)\n\n\nAparcamiento (con coste extra si no está incluido)\n\n\n\n\nPrecio: 180000 €\n\n\nEl Duplex Exclusivo:\n\n\n\nEste moderno dúplex de 110 m² se sitúa en una de las zonas más cotizadas por su seguridad y ambiente exclusivo. Con 3 habitaciones extra y 2 baños, la vivienda impresiona por su sofisticación y detalles de lujo. La orientación sur garantiza abundante luz natural, creando un ambiente cálido y acogedor. Además, los amplios espacios exteriores permiten disfrutar de momentos únicos en familia o con amigos.\n\n\n\n\n\nPiscina (para relajarse y disfrutar en verano)\n\n\nJardín (espacio exterior para actividades al aire libre)\n\n\nOrientación Sur (para recibir abundante luz natural)\n\n\n\n\nPrecio: 250000 €\n\n\n\n\n\n"
+                    }
+                ],
+                "max_tokens": "2000",
+                "temperature": "1",
+                "n_completions": "1",
+                "response_format": "text"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 728,
+                    "y": -119
+                },
+                "restore": {
+                    "expect": {
+                        "stop": {
+                            "mode": "chose"
+                        },
+                        "model": {
+                            "mode": "chose",
+                            "label": "gpt-3.5-turbo"
+                        },
+                        "select": {
+                            "label": "Create a Chat Completion (GPT and o1 models)"
+                        },
+                        "messages": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "Developer / System"
+                                    }
+                                }
+                            ]
+                        },
+                        "logit_bias": {
+                            "mode": "chose"
+                        },
+                        "response_format": {
+                            "mode": "chose",
+                            "label": "Text"
+                        },
+                        "additionalParameters": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "openai-gpt-3"
+                            },
+                            "label": "TFG"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:openai-gpt-3",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Select Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "chat",
+                                "prompt"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "validate": {
+                            "max": 2,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "top_p",
+                        "type": "number",
+                        "label": "Top P",
+                        "validate": {
+                            "max": 1,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "n_completions",
+                        "type": "number",
+                        "label": "Number"
+                    },
+                    {
+                        "name": "frequency_penalty",
+                        "type": "number",
+                        "label": "Frequency Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "presence_penalty",
+                        "type": "number",
+                        "label": "Presence Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "logit_bias",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "token",
+                                    "type": "text",
+                                    "label": "Token ID",
+                                    "required": true
+                                },
+                                {
+                                    "name": "probability",
+                                    "type": "number",
+                                    "label": "Probability",
+                                    "required": true,
+                                    "validate": {
+                                        "max": 100,
+                                        "min": -100
+                                    }
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Token Probability"
+                        },
+                        "type": "array",
+                        "label": "Token Probability"
+                    },
+                    {
+                        "name": "seed",
+                        "type": "integer",
+                        "label": "Seed"
+                    },
+                    {
+                        "name": "stop",
+                        "spec": {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Stop Sequence"
+                        },
+                        "type": "array",
+                        "label": "Stop Sequences",
+                        "validate": {
+                            "maxItems": 4
+                        }
+                    },
+                    {
+                        "name": "additionalParameters",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "key",
+                                    "type": "text",
+                                    "label": "Parameter Name",
+                                    "required": true
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "select",
+                                    "label": "Input Type",
+                                    "options": [
+                                        {
+                                            "label": "Text",
+                                            "value": "text",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ],
+                                            "default": true
+                                        },
+                                        {
+                                            "label": "Number",
+                                            "value": "number",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "number",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Boolean",
+                                            "value": "boolean",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "boolean",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Date",
+                                            "value": "date",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "date",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Any",
+                                            "value": "any",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "any",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Input Parameter"
+                        },
+                        "type": "array",
+                        "label": "Other Input Parameters"
+                    },
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "max_tokens",
+                        "type": "uinteger",
+                        "label": "Max Completion Tokens"
+                    },
+                    {
+                        "name": "messages",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "role",
+                                    "type": "select",
+                                    "label": "Role",
+                                    "options": {
+                                        "store": [
+                                            {
+                                                "label": "User",
+                                                "value": "user",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Assistant",
+                                                "value": "assistant",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Developer / System",
+                                                "value": "system",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "required": true
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Message"
+                        },
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true
+                    },
+                    {
+                        "name": "response_format",
+                        "type": "select",
+                        "label": "Response Format",
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "json_object"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "result",
+                        "type": "any",
+                        "label": "Result"
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "object",
+                        "type": "text",
+                        "label": "Object"
+                    },
+                    {
+                        "name": "created",
+                        "type": "date",
+                        "label": "Created"
+                    },
+                    {
+                        "name": "model",
+                        "type": "text",
+                        "label": "Model"
+                    },
+                    {
+                        "name": "choices",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "text",
+                                    "type": "text",
+                                    "label": "Text"
+                                },
+                                {
+                                    "name": "index",
+                                    "type": "number",
+                                    "label": "Index"
+                                },
+                                {
+                                    "name": "logprobs",
+                                    "type": "text",
+                                    "label": "Log Probs"
+                                },
+                                {
+                                    "name": "finish_reason",
+                                    "type": "text",
+                                    "label": "Finish Reason"
+                                },
+                                {
+                                    "name": "message",
+                                    "spec": [
+                                        {
+                                            "name": "role",
+                                            "type": "text",
+                                            "label": "Role"
+                                        },
+                                        {
+                                            "name": "content",
+                                            "type": "text",
+                                            "label": "Content"
+                                        },
+                                        {
+                                            "name": "refusal",
+                                            "type": "text",
+                                            "label": "Refusal"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Message"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Choices"
+                    },
+                    {
+                        "name": "usage",
+                        "spec": [
+                            {
+                                "name": "prompt_tokens",
+                                "type": "number",
+                                "label": "Prompt Tokens"
+                            },
+                            {
+                                "name": "completion_tokens",
+                                "type": "text",
+                                "label": "Completion Tokens"
+                            },
+                            {
+                                "name": "total_tokens",
+                                "type": "number",
+                                "label": "Total Tokens"
+                            },
+                            {
+                                "name": "prompt_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "cached_tokens",
+                                        "type": "uinteger",
+                                        "label": "Cached Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "image_tokens",
+                                        "type": "uinteger",
+                                        "label": "Image Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Prompt Tokens Details"
+                            },
+                            {
+                                "name": "completion_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "reasoning_tokens",
+                                        "type": "uinteger",
+                                        "label": "Reasoning Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    },
+                                    {
+                                        "name": "accepted_prediction_tokens",
+                                        "type": "uinteger",
+                                        "label": "Accepted Prediction Tokens"
+                                    },
+                                    {
+                                        "name": "rejected_prediction_tokens",
+                                        "type": "uinteger",
+                                        "label": "Rejected Prediction Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Completion Tokens Details"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Usage"
+                    },
+                    {
+                        "name": "service_tier",
+                        "type": "text",
+                        "label": "Service Tier"
+                    },
+                    {
+                        "name": "system_fingerprint",
+                        "type": "text",
+                        "label": "System Fingerprint"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "module": "email:ActionSendEmail",
+            "version": 7,
+            "parameters": {
+                "account": 6728674,
+                "saveAfterSent": false
+            },
+            "mapper": {
+                "cc": [],
+                "to": [
+                    "{{13.from.address}}"
+                ],
+                "bcc": [],
+                "from": "",
+                "text": "{{11.result}}",
+                "sender": "",
+                "headers": [],
+                "replyTo": "",
+                "subject": "Recomendacion de casas",
+                "priority": "normal",
+                "inReplyTo": "",
+                "references": [],
+                "attachments": [],
+                "contentType": "text"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1128,
+                    "y": -119
+                },
+                "restore": {
+                    "expect": {
+                        "cc": {
+                            "mode": "chose"
+                        },
+                        "to": {
+                            "mode": "chose",
+                            "items": [
+                                null
+                            ]
+                        },
+                        "bcc": {
+                            "mode": "chose"
+                        },
+                        "priority": {
+                            "label": "Normal"
+                        },
+                        "references": {
+                            "mode": "chose"
+                        },
+                        "attachments": {
+                            "mode": "chose"
+                        },
+                        "contentType": {
+                            "label": "Plaintext"
+                        }
+                    },
+                    "parameters": {
+                        "account": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "microsoft-smtp-imap"
+                            },
+                            "label": "TFG (gonzalo.rcarrato@hotmail.com)"
+                        },
+                        "saveAfterSent": {
+                            "label": "No"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account:smtp,google-restricted,microsoft-smtp-imap",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "saveAfterSent",
+                        "type": "select",
+                        "label": "Save message after sending",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "type": "hidden"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "to",
+                        "spec": {
+                            "name": "value",
+                            "type": "email",
+                            "label": "Email address",
+                            "required": true
+                        },
+                        "type": "array",
+                        "label": "To",
+                        "required": true
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject"
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "html",
+                                "text"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "attachments",
+                        "spec": [
+                            {
+                                "name": "fileName",
+                                "type": "filename",
+                                "label": "File name",
+                                "required": true,
+                                "semantic": "file:name"
+                            },
+                            {
+                                "name": "data",
+                                "type": "buffer",
+                                "label": "Data",
+                                "required": true,
+                                "semantic": "file:data"
+                            },
+                            {
+                                "name": "cid",
+                                "type": "text",
+                                "label": "Content-ID"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Attachments"
+                    },
+                    {
+                        "name": "cc",
+                        "spec": {
+                            "name": "value",
+                            "type": "email",
+                            "label": "Email address"
+                        },
+                        "type": "array",
+                        "label": "Copy recipient"
+                    },
+                    {
+                        "name": "bcc",
+                        "spec": {
+                            "name": "value",
+                            "type": "email",
+                            "label": "Email address"
+                        },
+                        "type": "array",
+                        "label": "Blind copy recipient"
+                    },
+                    {
+                        "name": "from",
+                        "type": "text",
+                        "label": "From"
+                    },
+                    {
+                        "name": "sender",
+                        "type": "text",
+                        "label": "Sender"
+                    },
+                    {
+                        "name": "replyTo",
+                        "type": "text",
+                        "label": "Reply-To"
+                    },
+                    {
+                        "name": "inReplyTo",
+                        "type": "text",
+                        "label": "In-Reply-To"
+                    },
+                    {
+                        "name": "references",
+                        "spec": {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Reference",
+                            "required": true
+                        },
+                        "type": "array",
+                        "label": "References"
+                    },
+                    {
+                        "name": "priority",
+                        "type": "select",
+                        "label": "Priority",
+                        "validate": {
+                            "enum": [
+                                "high",
+                                "normal",
+                                "low"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Content"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu2.make.com",
+        "notes": []
+    }
+}
