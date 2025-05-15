@@ -1,5 +1,7 @@
 # tfg-segmentacion-inmobiliaria-inteligente
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/THEARCHERY/tfg-segmentacion-inmobiliaria-inteligente?tab=MIT-1-ov-file#)
+
 Implementación de un sistema de segmentación inteligente de la oferta inmobiliaria mediante Fuzzy K-means y DBSCAN geográfico, con visualizaciones espaciales y automatización de recomendaciones vía Make.com y OpenAI.
 
 ---
@@ -27,7 +29,7 @@ Este proyecto desarrolla un sistema de segmentación inteligente de anuncios inm
 ## Estructura del Proyecto
 
 ```text
-|-- data/                  # Conjunto de datos originales y preprocesados
+|-- DATA/                  # Conjunto de datos originales y preprocesados
 |   |-- raw/               # Datos crudos (Idealista, INE, infraestructuras)
 |   |-- processed/         # Datos limpios y escalados
 |
@@ -46,7 +48,7 @@ Este proyecto desarrolla un sistema de segmentación inteligente de anuncios inm
 |
 |-- README.md              # Documentación del proyecto
 |-- requirements.txt       # Dependencias Python
-|-- LICENSE                # Licencia del proyecto
+|-- LICENSE                # Licencia MIT
 ```
 
 ## Requisitos
@@ -67,7 +69,7 @@ Este proyecto desarrolla un sistema de segmentación inteligente de anuncios inm
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/tfg-segmentacion-inmobiliaria-inteligente.git
+   git clone https://github.com/THEARCHERY/tfg-segmentacion-inmobiliaria-inteligente.git
    cd tfg-segmentacion-inmobiliaria-inteligente
    ```
 2. Crear y activar entorno virtual:
@@ -88,12 +90,12 @@ Este proyecto desarrolla un sistema de segmentación inteligente de anuncios inm
 1. Preprocesar datos:
 
    ```bash
-   python src/utils.py --preprocess data/raw/ data/processed/
+   python src/utils.py --preprocess DATA/raw/ DATA/processed/
    ```
 2. Ejecutar clustering:
 
    ```bash
-   python src/clustering.py --input data/processed/ --output results/
+   python src/clustering.py --input DATA/processed/ --output results/
    ```
 3. Generar visualizaciones:
 
@@ -115,7 +117,9 @@ Este proyecto desarrolla un sistema de segmentación inteligente de anuncios inm
 
 ## Datos
 
-* **Idealista:** \~100 000 registros de anuncios (precio, área, habitaciones, equipamientos, coordenadas).
+Los datos están disponibles en la carpeta [DATA](https://github.com/THEARCHERY/tfg-segmentacion-inmobiliaria-inteligente/tree/main/DATA):
+
+* **Idealista:** \~100 000 registros de anuncios (precio, área, habitaciones, equipamientos, coordenadas).
 * **INE:** Variables sociodemográficas adicionales.
 * **Infraestructuras:** Datos de transporte y servicios de Comunidad y Ayuntamiento de Madrid.
 
@@ -127,13 +131,15 @@ Flujo en **Make.com**:
 
 ## Contribuciones
 
-Las contribuciones son bienvenidas: crear issues o pull requests sobre mejoras en el preprocesamiento, algoritmos o integración.
+Las contribuciones son bienvenidas: crea issues o pull requests sobre mejoras en preprocesamiento, algoritmos o integración.
 
 ## Licencia
 
-Este proyecto está bajo la licencia MIT. Consulte el archivo [LICENSE] para más detalles.
+Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](https://github.com/THEARCHERY/tfg-segmentacion-inmobiliaria-inteligente?tab=MIT-1-ov-file#) para más detalles.
 
 ## Contacto
 
 * Autor: Gonzalo Romero Carrato
 * Email: [gonzalo.rcarrato@gmail.com](mailto:gonzalo.rcarrato@gmail.com)
+* GitHub: [THEARCHERY](https://github.com/THEARCHERY)
+
