@@ -131,7 +131,7 @@ Las contribuciones son bienvenidas: crear issues o pull requests sobre mejoras e
 
 ## Licencia
 
-Este proyecto está bajo la licencia MIT. Consulte el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la licencia MIT. Consulte el archivo [LICENSE] para más detalles.
 
 ## Contacto
 
