@@ -137,4 +137,3 @@ Este proyecto está bajo la licencia MIT. Consulte el archivo [LICENSE](LICENSE)
 
 * Autor: Gonzalo Romero Carrato
 * Email: [gonzalo.rcarrato@gmail.com](mailto:gonzalo.rcarrato@gmail.com)
-* GitHub: [Archery]([https://github.com/tu-usuario](https://github.com/THEARCHERY))
